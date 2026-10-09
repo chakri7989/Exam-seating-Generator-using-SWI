@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exam Seating Engine | Autonomous CLP(FD) Allocation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@500;600;700;800;900&family=Montserrat:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=2.6">
+</head>
+<body class="theme-lightorange">
+  <!-- Print-Only Official Document Header -->
+  <div class="print-header" id="printHeader">
+    <div class="print-institution">
+      <h1 class="print-univ-name" id="printInstName">OFFICE OF THE CONTROLLER OF EXAMINATIONS</h1>
+      <h2 class="print-exam-title" id="printExamName">EXAM SEATING ARRANGEMENT</h2>
+      <p class="print-meta-line" id="printMetaDetails">Date: <span id="printDateVal">-</span> &nbsp;|&nbsp; Session: <span id="printSessionVal">-</span> &nbsp;|&nbsp; Official Examination Seating Plan</p>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       PAGE 1: HOME PAGE (Hero view as in uploaded screenshot)
+       ============================================================ -->
+  <div id="pageHome" class="page-view no-print">
+    <section class="about-landing-section">
+      <!-- Top Landing Navbar -->
+      <header class="about-navbar">
+        <div class="about-brand-left">
+          <div class="brand-badge-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+              <rect x="3" y="3" width="7" height="7" rx="2"></rect>
+              <rect x="14" y="3" width="7" height="7" rx="2"></rect>
+              <rect x="3" y="14" width="7" height="7" rx="2"></rect>
+              <rect x="14" y="14" width="7" height="7" rx="2"></rect>
+            </svg>
+          </div>
+          <div>
+            <span class="system-org-title">EXAMINATION GOVERNANCE PLATFORM</span>
+            <span class="system-org-sub">Constraint Satisfaction & Hall Matrix Suite</span>
+          </div>
+        </div>
+
+        <!-- Right Corner: titled as "seating engine" in Glacier Indifference font -->
+        <div class="about-brand-right">
+          <div class="seating-engine-tag" title="Seating Engine Core">seating engine</div>
+        </div>
+      </header>
+
+      <!-- Hero Area -->
+      <div class="about-hero-container">
+        <!-- Left Column: Content & Action Button -->
+        <div class="hero-text-col">
+          <div class="hero-kicker-pill">
+            <span class="kicker-pulse"></span>
+            <span>NEXT-GENERATION EXAMINATION INFRASTRUCTURE</span>
+          </div>
+          <h1 class="hero-main-heading">
+            The quiet engine behind honest exams
+          </h1>
+          <p class="hero-subpart">
+            From a list of rooms and classes to a complete, conflict-free hall plan in a single click.
+          </p>
+          <p class="hero-description">
+            Engineered to eliminate examination malpractice and manual scheduling overhead. Our engine utilizes <strong>Constraint Logic Programming (CLP/FD)</strong> to mathematically guarantee zero adjacent overlap among candidates of the same class, subject, or academic branch across arbitrary room geometries.
+          </p>
+
+          <!-- 3 Bullet Check Points -->
+          <div class="hero-points-list">
+            <div class="point-item">
+              <span class="point-icon">✓</span>
+              <span><strong>Anti-Malpractice Non-Adjacency:</strong> Strict orthogonal & diagonal candidate separation.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-icon">✓</span>
+              <span><strong>Dynamic Room Topologies:</strong> Auto-handles broken/blocked benches without manual re-indexing.</span>
+            </div>
+            <div class="point-item">
+              <span class="point-icon">✓</span>
+              <span><strong>Audit-Grade Rosters:</strong> Instant desktop matrix visualizer and signature-ready printable sheets.</span>
+            </div>
+          </div>
+
+          <!-- Brown Button: "Get Seating" -->
+          <div class="hero-action-wrap">
+            <button type="button" class="btn-brown-get-seating" id="btnHeroGetSeating">
+              <span>Get Seating</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </button>
+            <span class="hero-action-hint">Click to launch the configuration engine</span>
+          </div>
+        </div>
+
+        <!-- Right Column: Aligned Image Card -->
+        <div class="hero-visual-col">
+          <div class="hero-image-card">
+            <div class="image-card-header">
+              <div class="window-dots">
+                <span class="dot dot-red"></span>
+                <span class="dot dot-yellow"></span>
+                <span class="dot dot-green"></span>
+              </div>
+              <span class="image-card-caption">EXAMINATION HALL ACTIVE SESSION</span>
+            </div>
+            <div class="image-wrapper">
+              <img src="assets/exam-students.png" alt="Students writing exam in examination hall" class="hero-exam-img" id="imgStudentsExam">
+            </div>
+            <div class="image-card-footer">
+              <div class="status-indicator-tag">
+                <span class="badge-dot-live"></span>
+                <span>100% Conflict-Free Seating Ensured</span>
+              </div>
+              <span class="tag-meta">Autonomous Interleaving Active</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ============================================================
+       PAGE 2: SEATING GENERATOR INPUT PAGE (Lightorange theme, Brown buttons)
+       Contains Examination info, Room matrix visualizer, and Student Groups
+       ============================================================ -->
+  <div id="pageEngine" class="page-view" style="display: none;">
+    <section class="generator-workspace" id="generator-engine">
+      <!-- Top Navigation Bar -->
+      <header class="generator-header no-print">
+        <div class="gen-brand-title">
+          <button type="button" class="btn btn-outline btn-brown-outline btn-rounded" id="btnBackToHome" title="Back to Home Page">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            Back to Home
+          </button>
+          <div class="gen-title-group">
+            <h2 class="gen-title">Seating Generator Engine</h2>
+            <p class="gen-subtitle">Enter Exam Parameters, Room Matrices & Student Batches</p>
+          </div>
+        </div>
+
+        <div class="gen-actions">
+          <div class="engine-badge" id="engineBadge">
+            <span class="status-dot"></span>
+            <span>Engine: SWI-Prolog CLP(FD)</span>
+          </div>
+          <button type="button" class="btn btn-outline btn-brown-outline btn-rounded" id="btnLoadPreset">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            Load Demo Preset
+          </button>
+          <button type="button" class="btn btn-outline btn-brown-outline btn-rounded" id="btnResetAll">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+            Reset
+          </button>
+        </div>
+      </header>
+
+      <!-- Main Input Workspace -->
+      <main class="config-full-layout">
+        <!-- Visual Overview Banner with Aligned Exam Graphic -->
+        <div class="config-hero-banner no-print">
+          <div class="banner-visual-left">
+            <img src="assets/exam-hall.png" alt="Exam hall session" class="banner-exam-icon">
+            <div>
+              <h3 class="banner-title">Examination Room Matrix & Batch Setup</h3>
+              <p class="banner-desc">Define room dimensions to preview interactive seating matrices. Toggle broken benches and import roll PINs below.</p>
+            </div>
+          </div>
+          <div class="banner-tag-pill">
+            <span class="badge-dot-live"></span>
+            <span>Auto Matrix Validation</span>
+          </div>
+        </div>
+
+        <!-- 1. Examination Information Card -->
+        <div class="panel-card">
+          <div class="panel-header">
+            <div class="panel-header-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+              <span>Examination Information</span>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label for="inputInstName">College / Institute Name</label>
+                <input type="text" id="inputInstName" class="input-control rounded-input" placeholder="Enter college / institute name (e.g. University College of Engineering)">
+              </div>
+              <div class="form-group">
+                <label for="inputExamTitle">Examination Title</label>
+                <input type="text" id="inputExamTitle" class="input-control rounded-input" placeholder="Enter exam title (e.g. Semester End / Midterm Examination)">
+              </div>
+              <div class="form-group">
+                <label for="inputExamDate">Date of Examination</label>
+                <input type="date" id="inputExamDate" class="input-control rounded-input">
+              </div>
+              <div class="form-group">
+                <label for="inputExamSession">Session / Timing</label>
+                <input type="text" id="inputExamSession" class="input-control rounded-input" placeholder="Enter session timing (e.g. FN 09:30 AM - 12:30 PM)">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Examination Halls / Rooms Card with Dynamic Matrix Visualizer -->
+        <div class="panel-card">
+          <div class="panel-header">
+            <div class="panel-header-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+              <span>Examination Halls / Rooms</span>
+            </div>
+            <button type="button" class="btn btn-sm btn-brown btn-rounded" id="btnAddRoom">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              Add Room
+            </button>
+          </div>
+          <div class="panel-body">
+            <div id="roomsListContainer" class="cards-list">
+              <!-- Dynamically populated with interactive room matrices -->
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Student Groups & Subjects Card -->
+        <div class="panel-card">
+          <div class="panel-header">
+            <div class="panel-header-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+              <span>Student Groups & Subjects</span>
+            </div>
+            <div class="header-action-group">
+              <button type="button" class="btn btn-sm btn-outline btn-brown-outline btn-rounded" id="btnOpenUploadModal" title="Upload starting and ending PIN numbers or full roll number list">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                Upload PINs (CSV)
+              </button>
+              <button type="button" class="btn btn-sm btn-brown btn-rounded" id="btnAddGroup">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                Add Group
+              </button>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="constraint-alert-box">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+              <span>Constraint Rule: Students from the <strong>same class</strong> or taking the <strong>same subject/branch</strong> are strictly prevented from sitting adjacent to each other.</span>
+            </div>
+            <div id="groupsListContainer" class="cards-list">
+              <!-- Dynamically populated group cards -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Action CTA: Brown "Get Seating" Button (Opens Page 3 on click) -->
+        <div class="action-cta-card">
+          <button type="button" class="btn btn-brown btn-lg btn-rounded" id="btnSolve">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            <span id="btnSolveText">Get Seating</span>
+          </button>
+          <div class="cta-note">Generates conflict-free seating in a new page using SWI-Prolog CLP(FD) logic solver</div>
+        </div>
+
+        <!-- Solver Loading Overlay State -->
+        <div class="loading-state-modal" id="loadingStateModal" style="display: none;">
+          <div class="ai-solver-wrapper">
+            <div class="ai-orbit-container">
+              <div class="ai-orbit-ring ring-1"></div>
+              <div class="ai-orbit-ring ring-2"></div>
+              <div class="ai-core-node">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                  <polyline points="2 17 12 22 22 17"></polyline>
+                  <polyline points="2 12 12 17 22 12"></polyline>
+                </svg>
+              </div>
+            </div>
+            <div class="ai-solver-badge">
+              <span class="ai-pulse-dot"></span>
+              <span>AI CSP CLP(FD) ENGINE ACTIVE</span>
+            </div>
+            <h4 class="ai-solver-heading">Solving Examination Constraints...</h4>
+            <p class="ai-solver-sub" id="aiSolverTicker">Translating room matrices and non-adjacency constraints into CLP(FD) domains...</p>
+          </div>
+        </div>
+
+        <!-- Error Banner -->
+        <div class="alert-box alert-danger" id="errorBox" style="display: none; margin-top: 20px;">
+          <div class="alert-icon">⚠️</div>
+          <div class="alert-content">
+            <h4 id="errorTitle">No Valid Seating Arrangement Found</h4>
+            <p id="errorMessage">The constraints may be too restrictive or student count exceeds usable capacity.</p>
+          </div>
+        </div>
+      </main>
+    </section>
+  </div>
+
+  <!-- ============================================================
+       PAGE 3: SEATING OUTPUT & PRINT PAGE (Dedicated new page)
+       Displays visual hall layouts, attendance roster, and Print button
+       ============================================================ -->
+  <div id="pageResults" class="page-view" style="display: none;">
+    <section class="results-workspace" id="results-engine">
+      <!-- Output Header with Back & Print Actions -->
+      <header class="results-page-header no-print">
+        <div class="results-nav-left">
+          <button type="button" class="btn btn-outline btn-brown-outline btn-rounded" id="btnBackToConfig">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            Back to Configuration
+          </button>
+          <div class="results-title-group">
+            <h2 class="results-page-title">Generated Seating Arrangement</h2>
+            <p class="results-page-subtitle">Official Non-Adjacent Seating Plan & Attendance Sheets</p>
+          </div>
+        </div>
+
+        <div class="results-nav-right">
+          <div class="view-pill-group">
+            <button type="button" class="pill-btn active" id="viewToggleGrid">Visual Layout</button>
+            <button type="button" class="pill-btn" id="viewToggleTable">Student Roster</button>
+          </div>
+          <button type="button" class="btn btn-brown btn-rounded" id="btnPrintResults">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+            Print / Export PDF
+          </button>
+        </div>
+      </header>
+
+      <main class="results-main-container">
+        <!-- Solution Status & Conflict-Free Audit Banner -->
+        <div class="solution-metrics-banner no-print" id="solutionSuccessBanner">
+          <div class="solution-meta-left">
+            <div class="success-icon-badge">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </div>
+            <div>
+              <h4 class="solution-meta-title">Conflict-Free Seating Plan Generated</h4>
+              <p class="solution-meta-sub" id="solutionDetailsSub">All non-adjacency constraints satisfied &bull; 0 Adjacent Conflicts</p>
+            </div>
+          </div>
+          <div class="solution-chips-wrap">
+            <span class="solution-chip chip-success" id="chipTotalAssigned">⚡ Assigned: 0 Students</span>
+            <span class="solution-chip chip-neutral" id="chipTotalRooms">🏛️ 1 Hall</span>
+            <span class="solution-chip chip-ai" id="chipSolveEngine">🧠 CLP(FD) Optimal</span>
+          </div>
+        </div>
+
+        <!-- Color Legend (hidden on print) -->
+        <div class="results-legend no-print" id="resultsLegend">
+          <!-- Dynamically built legend -->
+        </div>
+
+        <!-- Visual Room Grids View -->
+        <div id="gridViewsContainer" class="room-layouts-wrapper">
+          <!-- Generated room matrices -->
+        </div>
+
+        <!-- Tabular Student Roster View -->
+        <div id="tableViewContainer" class="roster-view-wrapper" style="display: none;">
+          <div class="roster-filter-bar no-print">
+            <input type="text" id="rosterSearch" class="input-control rounded-input input-sm" placeholder="Search student ID, class, or subject...">
+            <select id="rosterRoomFilter" class="input-control rounded-input input-sm">
+              <option value="all">All Rooms</option>
+            </select>
+          </div>
+          <div class="print-section-title">
+            <h3>STUDENT SEATING ROSTER & ATTENDANCE SHEET</h3>
+          </div>
+          <div class="table-responsive">
+            <table class="roster-table" id="rosterTable">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Student Roll / PIN No.</th>
+                  <th>Class name(Branch)</th>
+                  <th>Subject</th>
+                  <th>Room</th>
+                  <th>Row</th>
+                  <th>Col</th>
+                  <th>Seat No.</th>
+                  <th class="print-signature-col">Signature</th>
+                </tr>
+              </thead>
+              <tbody id="rosterTableBody">
+                <!-- Filled dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+
+      <!-- Print-Only Page Footers & Signature Blocks -->
+      <div class="print-signatures" id="printSignatures">
+        <div class="sig-block">
+          <div class="sig-line"></div>
+          <div class="sig-title">Hall Superintendent / Invigilator</div>
+        </div>
+        <div class="sig-block">
+          <div class="sig-line"></div>
+          <div class="sig-title">Chief Superintendent / Principal</div>
+        </div>
+        <div class="sig-block">
+          <div class="sig-line"></div>
+          <div class="sig-title">Controller of Examinations</div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Upload Starting & Ending PINs Modal -->
+  <div class="modal-overlay" id="uploadModal" style="display: none;">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <div class="modal-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+          </div>
+          <div>
+            <h3 class="modal-title">Upload Starting & Ending PIN Numbers</h3>
+            <p class="modal-sub">Import student groups with roll numbers from a CSV file or spreadsheet copy-paste</p>
+          </div>
+        </div>
+        <button type="button" class="btn-close-modal" id="btnCloseUploadModal" aria-label="Close modal">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="upload-guide-card">
+          <div class="guide-header">
+            <span><strong>Supported Formats:</strong> Range (Start & End PIN) or Full Roll Number List</span>
+            <div class="guide-actions">
+              <button type="button" class="btn btn-xs btn-outline btn-brown-outline btn-rounded" id="btnDownloadRangeTemplate">Download Range Template (.csv)</button>
+              <button type="button" class="btn btn-xs btn-outline btn-brown-outline btn-rounded" id="btnDownloadListTemplate">Download List Template (.csv)</button>
+            </div>
+          </div>
+          <div class="format-examples">
+            <div class="format-example-box">
+              <span class="format-tag">Format A: PIN Range (Recommended)</span>
+              <code>Class,Subject,Start PIN,End PIN,Excluded PINs<br>CSE(CS),Math,21B91A0501,21B91A0530,21B91A0507</code>
+            </div>
+          </div>
+        </div>
+
+        <div class="file-drop-zone" id="fileDropZone">
+          <input type="file" id="csvFileInput" accept=".csv,.txt" style="display:none;">
+          <div class="drop-zone-icon">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="12" y2="12"></line><line x1="15" y1="15" x2="12" y2="12"></line></svg>
+          </div>
+          <div class="drop-zone-text"><strong>Choose a CSV file</strong> or drag & drop it here</div>
+        </div>
+
+        <div class="modal-divider"><span>OR PASTE CSV ROWS DIRECTLY</span></div>
+
+        <div class="form-group">
+          <textarea id="csvPasteInput" class="input-control rounded-input modal-textarea" rows="4" placeholder="Class,Subject,Start PIN,End PIN,Excluded PINs&#10;CSE(CS),Math,21B91A0501,21B91A0520,21B91A0505"></textarea>
+        </div>
+
+        <div id="uploadPreviewSection" style="display: none; margin-top: 14px;">
+          <div class="preview-header">
+            <div class="preview-title" id="previewTitle">Parsed 0 Groups (0 Students)</div>
+            <div class="status-badge status-ready" id="previewBadge">Valid</div>
+          </div>
+          <div class="table-responsive preview-scroll">
+            <table class="roster-table mini-preview-table">
+              <thead>
+                <tr><th>Class</th><th>Subject</th><th>Start PIN</th><th>End PIN</th><th>Excluded</th><th>Students</th></tr>
+              </thead>
+              <tbody id="uploadPreviewTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="alert-box alert-danger" id="uploadErrorBox" style="display:none; margin-top: 12px; padding: 10px 14px;">
+          <div class="alert-icon">⚠️</div>
+          <div class="alert-content"><div id="uploadErrorMsg"></div></div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline btn-brown-outline btn-rounded" id="btnCancelUpload">Cancel</button>
+        <button type="button" class="btn btn-outline btn-brown-outline btn-rounded" id="btnAppendUpload" disabled>Append to Existing Groups</button>
+        <button type="button" class="btn btn-brown btn-rounded" id="btnApplyUpload" disabled>Replace & Apply Groups</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js?v=2.5"></script>
+</body>
+</html>

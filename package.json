@@ -1,0 +1,9 @@
+{
+  "name": "exam-seating-arrangement-ui",
+  "version": "1.0.0",
+  "description": "Interactive Web UI for AI Exam Seating Arrangement Generator with SWI-Prolog Engine",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  }
+}
